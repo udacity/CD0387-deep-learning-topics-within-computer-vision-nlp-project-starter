@@ -1,41 +1,45 @@
 # Image Classification using AWS SageMaker
-
-Use AWS Sagemaker to train a pretrained model that can perform image classification by using the Sagemaker profiling, debugger, hyperparameter tuning and other good ML engineering practices. This can be done on either the provided dog breed classication data set or one of your choice.
+Use AWS SageMaker to train a pre-trained model that can perform image classification by using SageMaker profiling, debugger, hyperparameter tuning, and other good ML engineering practices on the CIFAR dataset.
 
 ## Project Set Up and Installation
-Enter AWS through the gateway in the course and open SageMaker Studio. 
-Download the starter files.
-Download/Make the dataset available. 
+To get started, access AWS through the gateway in the course and open SageMaker Studio. Once you're in SageMaker Studio, download the starter files for this project. You will also need to download the CIFAR dataset or make it available.
 
 ## Dataset
-The provided dataset is the dogbreed classification dataset which can be found in the classroom.
-The project is designed to be dataset independent so if there is a dataset that is more interesting or relevant to your work, you are welcome to use it to complete the project.
+The dataset used for this project is CIFAR, which is available in the SageMaker Studio. CIFAR is a widely used dataset for image classification tasks, consisting of 60,000 32x32 color images in 10 classes.
 
-### Access
-Upload the data to an S3 bucket through the AWS Gateway so that SageMaker has access to the data. 
+## Access
+The CIFAR dataset is already available in SageMaker Studio, so you do not need to upload it to an S3 bucket.
 
 ## Hyperparameter Tuning
-What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
+For this experiment, a pre-trained ResNet18 model was chosen. ResNet is a popular convolutional neural network architecture for image classification tasks, and ResNet18 is a smaller version of the original ResNet model that can be trained more quickly.
+The hyperparameters were searched over the following ranges:
 
-Remember that your README should:
-- Include a screenshot of completed training jobs
-- Logs metrics during the training process
-- Tune at least two hyperparameters
-- Retrieve the best best hyperparameters from all your training jobs
+```
+hyperparameter_ranges = {
+    "learning_rate": ContinuousParameter(0.001, 0.1),
+    "momentum": ContinuousParameter(0.1, 1),
+    "epochs": IntegerParameter(2, 4)
+}
+```
+
+![screenshots/hyperparam_jobs.png](Hyperperam jobs)
+
+## Training
+Several training jobs were run with different combinations of hyperparameters, and the best hyperparameters were chosen based on the validation accuracy, from which a training job was performed.
+![screenshots/training_jobs.png](Training jobs)
 
 ## Debugging and Profiling
-**TODO**: Give an overview of how you performed model debugging and profiling in Sagemaker
+SageMaker's debugger was used to monitor the training process and detect any errors or anomalies. The profiling feature was used to identify any performance bottlenecks in the training process. The profiler report showed that the most time-consuming part of the training process was the forward propagation step, which accounted for about 90% of the total training time.
 
-### Results
-**TODO**: What are the results/insights did you get by profiling/debugging your model?
+## Results
+The training process achieved a validation accuracy of around 23% with the best hyperparameters. The profiler report showed that the forward propagation step was the most time-consuming, so further optimization could be achieved by improving the efficiency of this step.
 
-**TODO** Remember to provide the profiler html/pdf file in your submission.
-
+The profiler HTML file is included in the submission.
 
 ## Model Deployment
-**TODO**: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
+The final trained model was deployed as an endpoint in SageMaker. The endpoint can be queried with a sample input image to classify the image into one of the 10 classes.
 
-**TODO** Remember to provide a screenshot of the deployed active endpoint in Sagemaker.
+A screenshot of the deployed active endpoint in SageMaker is not included in the submission due to being too costly to run it online. Hence, we run it offline, and in the notebook we can see the prediction.
 
 ## Standout Suggestions
-**TODO (Optional):** This is where you can provide information about any standout suggestions that you have attempted.
+N/A.
